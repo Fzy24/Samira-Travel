@@ -10,17 +10,17 @@ Nomor WhatsApp disimpan di satu tempat, yaitu pada [`src/data/site-config.ts`](.
 
 ```ts
 whatsapp: {
-  displayNumber: '0812 3666 1876',
-  internationalNumber: '6281236661876',
-  status: 'NEEDS_CONFIRMATION',
-  sourceNote: 'Tercantum pada Slide 43 dokumen PRODUCT KNOWLEDGE TERBARU UPDATE 2026.pdf.',
+  displayNumber: '0812 9992 0849',
+  internationalNumber: '6281299920849',
+  status: 'VERIFIED',
+  sourceNote: 'Nomor WhatsApp resmi terverifikasi: 081299920849.',
 }
 ```
 
 ### Cara Mengganti Nomor WhatsApp
 
 1. Buka [`src/data/site-config.ts`](../src/data/site-config.ts).
-2. Ubah `displayNumber` (untuk tampilan teks di UI, misalnya `'0812 3666 1876'`) dan `internationalNumber` (untuk URL `https://wa.me/`, diawali kode negara `62` tanpa tanda `+` atau spasi).
+2. Ubah `displayNumber` (untuk tampilan teks di UI, misalnya `'0812 9992 0849'`) dan `internationalNumber` (untuk URL `https://wa.me/`, diawali kode negara `62` tanpa tanda `+` atau spasi).
 3. Seluruh tombol CTA di Header, Hero, Kartu Layanan, Kartu Paket, Direktori Hotel, Daftar Cabang, Modal Konsultasi, Tombol Melayang (`FloatingWhatsAppCTA`), dan Footer akan otomatis mengikuti nomor baru tersebut.
 
 ---

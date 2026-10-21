@@ -79,8 +79,8 @@ Dokumen ini berisi hasil inventarisasi lengkap terhadap dokumen Product Knowledg
 - [ ] **Grafik Data SISKOPATUH 2024 (Slide 8)** & **Klaim Jumlah Mitra 67.000+ (Slide 12)**: Saat ini tidak ditampilkan sebagai klaim superlatif di halaman utama sampai bukti dan persetujuan publikasi dikonfirmasi klien.
 - [ ] **Testimoni Jamaah (`PLACEHOLDER`)**: Belum tersedia di dalam PDF; seksi testimoni disembunyikan dalam Mode Demo hingga ulasan asli dan izin jamaah diberikan.
 
-### 11. Kontak, Website & Media Sosial (`NEEDS_CONFIRMATION`)
-- [ ] **WhatsApp**: `0812 3666 1876` (`6281236661876`) — konfirmasi apakah nomor ini aktif untuk layanan pelanggan pusat.
+### 11. Kontak, Website & Media Sosial
+- [x] **WhatsApp**: `0812 9992 0849` (`6281299920849`) — telah dikonfirmasi sebagai nomor resmi WhatsApp layanan jamaah.
 - [ ] **Website**: `https://samiratravel.co.id` (pada Slide 1 juga tertulis `www.samiratravel.com`).
 - [ ] **Instagram**: `@samira_travel` (pada spanduk Slide 4 juga tertulis `@samira_ali_wisata`).
 - [ ] **YouTube**: `Samira Travel Official`.

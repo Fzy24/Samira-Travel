@@ -56,5 +56,5 @@ Gunakan pengaturan berikut pada halaman **Set up builds and deployments**:
 4. Setelah URL demo aktif, lakukan pengujian berikut:
    - Buka URL di browser desktop dan smartphone.
    - Uji seluruh navigasi anchor (`#profil`, `#layanan`, `#paket`, `#hotel-fasilitas`, `#cabang`, `#galeri`, `#faq`, `#kontak`).
-   - Klik tombol **Konsultasi via WhatsApp** untuk memastikan tautan `https://wa.me/6281236661876` terbuka dengan pesan yang benar.
+   - Klik tombol **Konsultasi via WhatsApp** untuk memastikan tautan `https://wa.me/6281299920849` terbuka dengan pesan yang benar.
    - Pastikan halaman `/kebijakan-privasi` dan `/syarat-ketentuan` dapat diakses tanpa error.

@@ -64,11 +64,10 @@ export const SITE_CONFIG: SiteConfig = {
     'Profil resmi PT Samira Ali Wisata (Samira Travel). Informasi layanan perjalanan ibadah umrah, haji khusus & Furoda, halal tour, referensi hotel, fasilitas jamaah, dan konsultasi pendaftaran.',
   siteUrl: 'https://samiratravel.co.id',
   whatsapp: {
-    displayNumber: '0812 3666 1876',
-    internationalNumber: '6281236661876',
-    status: 'NEEDS_CONFIRMATION',
-    sourceNote:
-      'Tercantum pada Slide 43 dokumen PRODUCT KNOWLEDGE TERBARU UPDATE 2026.pdf. Pastikan nomor aktif dan siap melayani calon jamaah sebelum publikasi produksi.',
+    displayNumber: '0812 9992 0849',
+    internationalNumber: '6281299920849',
+    status: 'VERIFIED',
+    sourceNote: 'Nomor WhatsApp resmi terverifikasi: 081299920849.',
   },
   headOffice: {
     addressPrimary:

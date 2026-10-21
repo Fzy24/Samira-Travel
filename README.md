@@ -17,7 +17,7 @@ Proyek ini dirancang khusus untuk memenuhi kebutuhan versi pertama: menyajikan p
 3. **Efek Interaktif Cahaya & Kunang-Kunang (`FireflyCursor.astro`)**:
    - Mengikuti gerakan pointer mouse dengan interpolasi halus (*smooth lerp*), jumlah partikel dibatasi maksimal 14 titik, berada di layer dekoratif (`pointer-events: none`), otomatis nonaktif pada perangkat sentuh (*touch*), dan menghormati `prefers-reduced-motion: reduce`.
 4. **Integrasi WhatsApp Kontekstual (`src/utils/whatsapp.ts` & `ConsultationModal.astro`)**:
-   - Nomor tujuan terpusat (`0812 3666 1876` / `6281236661876`) dengan pesan otomatis yang menyesuaikan pilihan layanan, tingkatan paket, atau kota keberangkatan.
+   - Nomor tujuan terpusat (`0812 9992 0849` / `6281299920849`) dengan pesan otomatis yang menyesuaikan pilihan layanan, tingkatan paket, atau kota keberangkatan.
 
 ---
 
