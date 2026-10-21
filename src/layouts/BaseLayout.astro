@@ -1,0 +1,62 @@
+---
+/**
+ * Layout dasar (BaseLayout) untuk seluruh halaman website Samira Travel.
+ * Menyediakan struktur HTML semantik, metadata dasar, tautan skip-to-content untuk aksesibilitas,
+ * Header, Footer, Modal Konsultasi, Tombol WhatsApp Melayang, dan Efek Kunang-Kunang (FireflyCursor).
+ */
+import '../styles/global.css';
+import { SITE_CONFIG } from '../data/site-config';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import ConsultationModal from '../components/ConsultationModal.astro';
+import FloatingWhatsAppCTA from '../components/FloatingWhatsAppCTA.astro';
+import FireflyCursor from '../components/FireflyCursor.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  currentPath?: string;
+}
+
+const {
+  title = SITE_CONFIG.defaultTitle,
+  description = SITE_CONFIG.defaultDescription,
+  currentPath = Astro.url.pathname,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="id_ID" />
+  </head>
+  <body class="flex min-h-screen flex-col bg-ivory text-charcoal selection:bg-gold-300 selection:text-navy-900">
+    <!-- Tautan Aksesibilitas Lewati ke Konten Utama -->
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:rounded-xl focus:bg-gold-400 focus:px-4 focus:py-2.5 focus:text-sm focus:font-bold focus:text-navy-900 focus:shadow-lg"
+    >
+      Lewati ke konten utama
+    </a>
+
+    <FireflyCursor />
+    <Header currentPath={currentPath} />
+
+    <main id="main-content" class="flex-1">
+      <slot />
+    </main>
+
+    <Footer />
+    <FloatingWhatsAppCTA />
+    <ConsultationModal />
+  </body>
+</html>

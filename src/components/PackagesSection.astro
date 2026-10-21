@@ -1,0 +1,379 @@
+---
+/**
+ * Komponen PackagesSection (Bagian E pada Struktur Website).
+ * Menampilkan perbandingan 4 tingkatan paket umrah (Safara, Safawi, Sukari, Majol) dengan
+ * pola progressive disclosure (<details>) agar kartu tetap rapi dan mudah dibaca,
+ * serta menyajikan komponen Termasuk/Belum Termasuk, Perlengkapan 9 Item, dan Request Fasilitas.
+ */
+import { getPackageTiers, GROUP_PROMO_REFERENCES } from '../data/packages';
+import {
+  getPackageFacilityBreakdown,
+  UMRAH_EQUIPMENT_ITEMS,
+  CUSTOM_FACILITY_REQUESTS,
+} from '../data/facilities';
+import { getOfficialWhatsAppUrl } from '../utils/whatsapp';
+import { getSafeScheduleDisplay, getSafePriceDisplay } from '../utils/verification';
+import VerificationBadge from './VerificationBadge.astro';
+
+const packageTiers = getPackageTiers();
+const { included, excluded } = getPackageFacilityBreakdown();
+---
+
+<section
+  id="paket"
+  class="section-padding bg-ivory text-charcoal"
+  aria-labelledby="paket-heading"
+>
+  <div class="container-luxury">
+    <!-- Header Bagian -->
+    <div class="max-w-3xl space-y-3">
+      <div class="flex flex-wrap items-center gap-2">
+        <span class="badge-eyebrow">Pilihan Paket &amp; Fasilitas</span>
+        <VerificationBadge status="NEEDS_CONFIRMATION" />
+      </div>
+      <h2
+        id="paket-heading"
+        class="font-editorial text-3xl font-bold text-navy-800 sm:text-4xl lg:text-5xl"
+      >
+        Empat Tingkatan Paket Umrah Sesuai Kebutuhan Keluarga
+      </h2>
+      <p class="text-base sm:text-lg text-charcoal-muted leading-relaxed">
+        Struktur paket dalam materi produk Samira Travel dirancang berdasarkan kelas hotel dan estimasi jarak ke Masjidil Haram serta Masjid Nabawi. Seluruh jadwal aktif dan harga terbaru dikonfirmasi melalui konsultan resmi.
+      </p>
+    </div>
+
+    <!-- Pemberitahuan Transparansi Jadwal & Harga -->
+    <div class="mt-6 rounded-2xl border border-gold-300/70 bg-white p-4 sm:p-5 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div class="space-y-1 text-xs sm:text-sm text-charcoal-muted">
+        <p class="font-semibold text-navy-800">
+          Pemberitahuan Status Jadwal &amp; Harga Paket:
+        </p>
+        <p>
+          Materi poster keberangkatan periode <strong>Juli–Agustus 2026</strong> pada dokumen referensi telah berakhir dan <strong>tidak ditampilkan sebagai jadwal mendatang</strong>. Untuk jadwal musim terbaru, silakan hubungi konsultan resmi kami.
+        </p>
+      </div>
+      <VerificationBadge status="PLACEHOLDER" customLabel="Jadwal & Harga Menunggu Konfirmasi" />
+    </div>
+
+    <!-- Grid 4 Tingkatan Paket -->
+    <div class="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
+      {
+        packageTiers.map((pkg) => {
+          const safeSchedule = getSafeScheduleDisplay(
+            pkg.scheduleStatus.activeScheduleText,
+            pkg.scheduleStatus.isExpiredReferenceInDoc
+          );
+          const safePrice = getSafePriceDisplay(null, pkg.priceStatus.status);
+          const packageWaUrl = getOfficialWhatsAppUrl({
+            packageName: pkg.name,
+            serviceName: 'Jasa Perjalanan Ibadah Umrah',
+          });
+
+          return (
+            <article
+              class={`card-surface flex flex-col justify-between overflow-hidden ${
+                pkg.isFeatured
+                  ? 'border-2 border-gold-400 ring-4 ring-gold-400/15'
+                  : 'border-navy-100/80'
+              }`}
+            >
+              <div>
+                {/* Header Kartu Paket */}
+                <div
+                  class={`p-5 ${
+                    pkg.isFeatured
+                      ? 'bg-royal-gradient text-white'
+                      : 'bg-navy-800 text-white'
+                  }`}
+                >
+                  <div class="flex items-center justify-between gap-2">
+                    <span class="rounded-full bg-gold-400/20 border border-gold-300/40 px-2.5 py-0.5 text-[11px] font-semibold text-gold-300">
+                      {pkg.badgeText}
+                    </span>
+                    <VerificationBadge status={pkg.status} variant="dark" />
+                  </div>
+                  <h3 class="mt-3 font-editorial text-2xl font-bold text-white">
+                    {pkg.name}
+                  </h3>
+                  <p class="mt-1 text-xs text-ivory-200/85">{pkg.categoryLabel}</p>
+                </div>
+
+                {/* Ringkasan Utama Paket */}
+                <div class="p-5 space-y-4">
+                  <p class="text-xs leading-relaxed text-charcoal-muted">
+                    {pkg.tagline}
+                  </p>
+
+                  {/* Kelas Hotel & Estimasi Jarak Referensi */}
+                  <div class="rounded-xl bg-ivory-100 p-3.5 space-y-2.5 text-xs">
+                    <div>
+                      <span class="font-semibold text-navy-800 block">Akomodasi Makkah:</span>
+                      <span class="text-royal-700 font-medium">{pkg.makkahHotelClass}</span>
+                      <span class="block text-[11px] text-charcoal-muted mt-0.5">
+                        {pkg.approximateDistanceNote.makkah}
+                      </span>
+                    </div>
+                    <div class="border-t border-navy-100 pt-2">
+                      <span class="font-semibold text-navy-800 block">Akomodasi Madinah:</span>
+                      <span class="text-royal-700 font-medium">{pkg.madinahHotelClass}</span>
+                      <span class="block text-[11px] text-charcoal-muted mt-0.5">
+                        {pkg.approximateDistanceNote.madinah}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Status Jadwal, Durasi, dan Harga yang Aman */}
+                  <dl class="space-y-2 text-xs border-y border-navy-100 py-3">
+                    <div class="flex justify-between gap-2">
+                      <dt class="text-charcoal-muted">Durasi Referensi:</dt>
+                      <dd class="font-semibold text-navy-800 text-right">
+                        {pkg.durationOptionsInDoc.join(', ')}
+                      </dd>
+                    </div>
+                    <div class="flex justify-between gap-2">
+                      <dt class="text-charcoal-muted">Jadwal Keberangkatan:</dt>
+                      <dd class="font-semibold text-royal-700 text-right">
+                        {safeSchedule.displayText}
+                      </dd>
+                    </div>
+                    <div class="flex justify-between gap-2">
+                      <dt class="text-charcoal-muted">Informasi Harga:</dt>
+                      <dd class="font-semibold text-gold-700 text-right">
+                        {safePrice.displayText}
+                      </dd>
+                    </div>
+                  </dl>
+
+                  {/* Progressive Disclosure untuk Detail Hotel, Maskapai & Sorotan */}
+                  <details class="group rounded-xl border border-navy-100 bg-ivory-50/70 p-3 text-xs">
+                    <summary class="flex cursor-pointer list-none items-center justify-between font-semibold text-navy-800">
+                      <span>Lihat Referensi Hotel &amp; Detail</span>
+                      <span class="transition-transform duration-200 group-open:rotate-180" aria-hidden="true">
+                        &#9662;
+                      </span>
+                    </summary>
+                    <div class="mt-3 space-y-3 border-t border-navy-100 pt-3 text-charcoal-muted">
+                      <div>
+                        <strong class="text-navy-800 block">Referensi Hotel Makkah:</strong>
+                        <p>{pkg.makkahReferenceHotels.join(' / ')}</p>
+                      </div>
+                      <div>
+                        <strong class="text-navy-800 block">Referensi Hotel Madinah:</strong>
+                        <p>{pkg.madinahReferenceHotels.join(' / ')}</p>
+                      </div>
+                      <div>
+                        <strong class="text-navy-800 block">Maskapai pada Materi:</strong>
+                        <p>{pkg.airlinesInDoc.join(', ')} (mengikuti rute embarkasi)</p>
+                      </div>
+                      <div>
+                        <strong class="text-navy-800 block">Sorotan Fasilitas:</strong>
+                        <ul class="mt-1 list-disc pl-4 space-y-1">
+                          {pkg.keyHighlights.map((hl) => (
+                            <li>{hl}</li>
+                          ))}
+                        </ul>
+                      </div>
+                      <p class="italic text-[11px] text-charcoal-muted">
+                        Detail paket menunggu konfirmasi untuk setiap tanggal keberangkatan.
+                      </p>
+                    </div>
+                  </details>
+                </div>
+              </div>
+
+              {/* Footer Kartu CTA */}
+              <div class="p-5 pt-0 space-y-2">
+                <a
+                  href={packageWaUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="btn-primary-gold w-full !py-2.5 !text-xs"
+                >
+                  <span>Tanyakan {pkg.name} via WhatsApp</span>
+                </a>
+                <button
+                  type="button"
+                  data-open-consultation-modal
+                  data-context-package={pkg.name}
+                  class="w-full rounded-xl border border-navy-200 py-2 text-xs font-semibold text-navy-800 transition-colors hover:bg-navy-50"
+                >
+                  Pilih Kota &amp; Konsultasi Paket
+                </button>
+              </div>
+            </article>
+          );
+        })
+      }
+    </div>
+
+    <!-- Komponen Termasuk dan Belum Termasuk dalam Paket (Slide 35 & 36) -->
+    <div class="mt-16 grid grid-cols-1 gap-8 lg:grid-cols-2">
+      <!-- Termasuk dalam Paket -->
+      <div class="card-surface p-6 sm:p-8 border-t-4 border-t-turquoise-500">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <span class="text-xs font-semibold uppercase tracking-wider text-turquoise-700">
+              Komponen Standar (Slide 35)
+            </span>
+            <h3 class="mt-1 font-editorial text-2xl sm:text-3xl font-bold text-navy-800">
+              Termasuk dalam Paket (Kandidat Program)
+            </h3>
+          </div>
+          <VerificationBadge status="NEEDS_CONFIRMATION" />
+        </div>
+        <p class="mt-2 text-xs sm:text-sm text-charcoal-muted">
+          Daftar berikut merupakan fasilitas yang tercantum dalam materi Product Knowledge. Kepastian setiap komponen mengikuti paket dan jadwal keberangkatan yang dikonfirmasi.
+        </p>
+
+        <ul class="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
+          {
+            included.map((item) => (
+              <li class="rounded-xl border border-navy-100/80 bg-ivory-50 p-3.5 text-xs">
+                <div class="flex items-start gap-2.5">
+                  <span class="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-turquoise-100 text-turquoise-700 font-bold" aria-hidden="true">
+                    &#10003;
+                  </span>
+                  <div>
+                    <strong class="font-semibold text-navy-800 block">{item.title}</strong>
+                    <span class="mt-0.5 block text-charcoal-muted leading-relaxed">
+                      {item.description}
+                    </span>
+                  </div>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <!-- Tidak Termasuk dalam Paket -->
+      <div class="card-surface p-6 sm:p-8 border-t-4 border-t-gold-500 flex flex-col justify-between">
+        <div>
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <span class="text-xs font-semibold uppercase tracking-wider text-gold-700">
+                Ketentuan Biaya Tambahan (Slide 36)
+              </span>
+              <h3 class="mt-1 font-editorial text-2xl sm:text-3xl font-bold text-navy-800">
+                Tidak Termasuk dalam Paket
+              </h3>
+            </div>
+            <VerificationBadge status="NEEDS_CONFIRMATION" />
+          </div>
+          <p class="mt-2 text-xs sm:text-sm text-charcoal-muted">
+            Komponen berikut berada di luar harga dasar paket dan perlu dipersiapkan sesuai kebutuhan masing-masing calon jamaah.
+          </p>
+
+          <ul class="mt-6 space-y-3">
+            {
+              excluded.map((item) => (
+                <li class="rounded-xl border border-navy-100/80 bg-ivory-50 p-3.5 text-xs">
+                  <div class="flex items-start gap-2.5">
+                    <span class="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-gold-100 text-gold-700 font-bold" aria-hidden="true">
+                      &bull;
+                    </span>
+                    <div>
+                      <strong class="font-semibold text-navy-800 block">{item.title}</strong>
+                      <span class="mt-0.5 block text-charcoal-muted leading-relaxed">
+                        {item.description}
+                      </span>
+                    </div>
+                  </div>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+
+        <!-- Program Grup / Promo pada Materi (Slide 38) -->
+        <div class="mt-6 rounded-xl border border-gold-300/60 bg-gold-50/70 p-4 space-y-2">
+          <div class="flex items-center justify-between gap-2">
+            <h4 class="font-editorial text-lg font-bold text-navy-800">
+              Referensi Program Grup / Rombongan (Slide 38)
+            </h4>
+            <VerificationBadge status="NEEDS_CONFIRMATION" />
+          </div>
+          <div class="grid grid-cols-1 gap-2 sm:grid-cols-3 pt-1">
+            {
+              GROUP_PROMO_REFERENCES.map((promo) => (
+                <div class="rounded-lg bg-white p-2.5 border border-gold-200 text-xs">
+                  <strong class="text-navy-800 block">{promo.code}</strong>
+                  <span class="text-[11px] text-charcoal-muted">{promo.title}</span>
+                </div>
+              ))
+            }
+          </div>
+          <p class="text-[11px] text-charcoal-muted">
+            Skema rombongan di atas tercantum pada materi presentasi dan memerlukan konfirmasi periode keberlakuan serta syarat pendaftaran grup.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Perlengkapan Umrah (9 Item Slide 23) & Request Fasilitas (Slide 34) -->
+    <div class="mt-10 grid grid-cols-1 gap-8 lg:grid-cols-12">
+      <div class="lg:col-span-7 card-surface p-6 sm:p-8">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <h3 class="font-editorial text-2xl font-bold text-navy-800">
+            9 Item Perlengkapan Umrah pada Materi Produk (Slide 23)
+          </h3>
+          <VerificationBadge status="NEEDS_CONFIRMATION" />
+        </div>
+        <p class="mt-1.5 text-xs sm:text-sm text-charcoal-muted">
+          Daftar atribut dan perlengkapan fisik jamaah yang ditampilkan pada materi Product Knowledge Samira Travel:
+        </p>
+        <div class="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-3">
+          {
+            UMRAH_EQUIPMENT_ITEMS.map((eq, index) => (
+              <div class="rounded-xl border border-navy-100 bg-ivory-50 p-3 text-xs">
+                <span class="text-[11px] font-bold text-gold-600">0{index + 1}</span>
+                <strong class="mt-0.5 block font-semibold text-navy-800">{eq.name}</strong>
+                <p class="mt-1 text-[11px] text-charcoal-muted leading-normal">{eq.description}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      <div class="lg:col-span-5 card-surface bg-navy-800 text-white p-6 sm:p-8 flex flex-col justify-between">
+        <div class="space-y-4">
+          <div class="flex items-center justify-between gap-2">
+            <span class="text-xs font-semibold uppercase tracking-wider text-gold-300">
+              Layanan Kustomisasi (Slide 34)
+            </span>
+            <VerificationBadge status="NEEDS_CONFIRMATION" variant="dark" />
+          </div>
+          <h3 class="font-editorial text-2xl sm:text-3xl font-bold text-white">
+            Permintaan Fasilitas Tambahan (Request Fasilitas)
+          </h3>
+          <p class="text-xs sm:text-sm text-ivory-200/85 leading-relaxed">
+            Bagi keluarga atau rombongan yang menginginkan penyesuaian layanan di luar program reguler, materi klien mencantumkan opsi permintaan tambahan berikut:
+          </p>
+          <ul class="grid grid-cols-1 gap-2 text-xs text-ivory-100">
+            {
+              CUSTOM_FACILITY_REQUESTS.map((reqItem) => (
+                <li class="flex items-center gap-2 rounded-lg bg-white/5 px-3 py-2 border border-white/10">
+                  <span class="h-1.5 w-1.5 rounded-full bg-turquoise-400" aria-hidden="true" />
+                  <span>{reqItem}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+
+        <div class="mt-6 pt-4 border-t border-white/15">
+          <a
+            href={getOfficialWhatsAppUrl({
+              serviceName: 'Permintaan Fasilitas Tambahan (Custom / Private Request)',
+            })}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-primary-gold w-full !py-2.5 !text-xs"
+          >
+            <span>Konsultasikan Fasilitas Tambahan</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

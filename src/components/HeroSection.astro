@@ -1,0 +1,197 @@
+---
+/**
+ * Komponen HeroSection (Bagian B pada Struktur Website).
+ * Menampilkan visual utama dengan dukungan video background (jika tersedia di SITE_CONFIG.heroMedia)
+ * atau fallback poster visual berkualitas tinggi, headline editorial, CTA utama "Konsultasi via WhatsApp",
+ * CTA sekunder "Jelajahi Layanan", serta indikator melanjutkan guliran (scroll).
+ */
+import { SITE_CONFIG } from '../data/site-config';
+import { COMPANY_PROFILE, COMPANY_LICENSES } from '../data/company';
+import { getOfficialWhatsAppUrl } from '../utils/whatsapp';
+import VerificationBadge from './VerificationBadge.astro';
+
+const heroWhatsAppUrl = getOfficialWhatsAppUrl();
+const { heroMedia } = SITE_CONFIG;
+---
+
+<section
+  id="beranda"
+  class="relative min-h-[86vh] flex items-center overflow-hidden bg-navy-800 text-white"
+  aria-labelledby="hero-headline"
+>
+  <!-- Layer Media Latar Belakang (Video dengan Fallback Poster Statis) -->
+  <div class="absolute inset-0 z-0">
+    {
+      heroMedia.useVideo && heroMedia.videoUrl ? (
+        <video
+          class="h-full w-full object-cover object-center opacity-35"
+          autoplay
+          muted
+          loop
+          playsinline
+          poster={heroMedia.posterUrl}
+        >
+          <source src={heroMedia.videoUrl} type="video/mp4" />
+        </video>
+      ) : (
+        <img
+          src={heroMedia.posterUrl}
+          alt={heroMedia.posterAlt}
+          width="1200"
+          height="750"
+          fetchpriority="high"
+          class="h-full w-full object-cover object-center opacity-30 scale-105 transition-transform duration-1000"
+        />
+      )
+    }
+    <!-- Overlay gradasi berlapis untuk menjamin kontras keterbacaan teks -->
+    <div
+      class="absolute inset-0 bg-gradient-to-r from-navy-900/95 via-navy-800/88 to-royal-800/75"
+      aria-hidden="true"
+    ></div>
+    <div
+      class="absolute inset-0 bg-gradient-to-t from-navy-900 via-transparent to-navy-900/60"
+      aria-hidden="true"
+    ></div>
+  </div>
+
+  <!-- Konten Utama Hero -->
+  <div class="container-luxury relative z-10 py-16 sm:py-24 lg:py-28">
+    <div class="grid grid-cols-1 items-center gap-12 lg:grid-cols-12">
+      <!-- Kolom Kiri: Copywriting & CTA (7 Kolom) -->
+      <div class="lg:col-span-7 space-y-6">
+        <div class="flex flex-wrap items-center gap-2.5">
+          <span class="badge-eyebrow-dark">
+            <span class="h-1.5 w-1.5 rounded-full bg-gold-400" aria-hidden="true"></span>
+            <span>{COMPANY_PROFILE.legalEntityName}</span>
+          </span>
+          <VerificationBadge
+            status="NEEDS_CONFIRMATION"
+            customLabel="Data Dokumen Klien 2026"
+            variant="dark"
+          />
+        </div>
+
+        <h1
+          id="hero-headline"
+          class="font-editorial text-4xl font-bold leading-[1.12] tracking-tight text-white sm:text-5xl lg:text-6xl"
+        >
+          Mendampingi Perjalanan Ibadah Keluarga Anda dengan{' '}
+          <span class="text-gold-300 italic font-semibold">Ketertiban &amp; Ketulusan</span>
+        </h1>
+
+        <p class="max-w-2xl text-base sm:text-lg leading-relaxed text-ivory-100/90">
+          <strong>{SITE_CONFIG.brandName}</strong> ({SITE_CONFIG.legalEntityName}) menghadirkan layanan perjalanan ibadah umrah, haji khusus &amp; Furoda, serta wisata halal dengan pendampingan pembimbing berbahasa Indonesia, pilihan tingkatan hotel terstruktur, dan penanganan koper terpadu dari bandara hingga ke kamar hotel.
+        </p>
+
+        <!-- Tombol CTA Utama & Sekunder -->
+        <div class="flex flex-col sm:flex-row sm:items-center gap-3.5 pt-2">
+          <a
+            href={heroWhatsAppUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-primary-gold text-base"
+          >
+            <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12 0 2.126.556 4.124 1.529 5.856l-1.529 5.584 5.715-1.499c1.694.925 3.635 1.459 5.702 1.459 6.627 0 12-5.373 12-12s-5.39-11.4-11.417-11.4z"/>
+            </svg>
+            <span>Konsultasi via WhatsApp</span>
+          </a>
+
+          <a href="#layanan" class="btn-secondary-outline text-base">
+            <span>Jelajahi Layanan</span>
+            <span aria-hidden="true">&darr;</span>
+          </a>
+        </div>
+
+        <!-- Ringkasan Fakta Dokumen Klien -->
+        <dl class="grid grid-cols-2 gap-4 pt-6 border-t border-white/15 sm:grid-cols-3">
+          <div>
+            <dt class="text-xs font-medium uppercase tracking-wider text-ivory-200/75">
+              Tahun Pendirian
+            </dt>
+            <dd class="mt-1 font-editorial text-2xl font-bold text-gold-300">
+              {COMPANY_PROFILE.foundedYear.value}
+            </dd>
+            <dd class="text-[11px] text-ivory-200/70">Sesuai dokumen profil</dd>
+          </div>
+          <div>
+            <dt class="text-xs font-medium uppercase tracking-wider text-ivory-200/75">
+              Tingkatan Paket Umrah
+            </dt>
+            <dd class="mt-1 font-editorial text-2xl font-bold text-turquoise-300">
+              4 Pilihan Tier
+            </dd>
+            <dd class="text-[11px] text-ivory-200/70">Safara, Safawi, Sukari, Majol</dd>
+          </div>
+          <div class="col-span-2 sm:col-span-1">
+            <dt class="text-xs font-medium uppercase tracking-wider text-ivory-200/75">
+              Izin Tercantum di Materi
+            </dt>
+            <dd class="mt-1 font-editorial text-xl font-bold text-white">
+              PPIU &amp; PIHK
+            </dd>
+            <dd class="text-[11px] text-ivory-200/70">Menunggu verifikasi rilis</dd>
+          </div>
+        </dl>
+      </div>
+
+      <!-- Kolom Kanan: Kartu Visual Editorial & Informasi Perizinan (5 Kolom) -->
+      <div class="lg:col-span-5">
+        <div class="relative rounded-2xl border border-gold-400/35 bg-navy-900/80 p-5 sm:p-6 shadow-2xl backdrop-blur-md">
+          <div class="overflow-hidden rounded-xl border border-white/10">
+            <img
+              src="/images/hero/makkah-haram-view.webp"
+              alt="Pemandangan teras hotel menghadap pelataran Masjidil Haram"
+              width="560"
+              height="360"
+              class="h-56 sm:h-64 w-full object-cover transition-transform duration-700 hover:scale-105"
+            />
+          </div>
+
+          <div class="mt-5 space-y-3">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-xs font-semibold uppercase tracking-wider text-gold-300">
+                Identitas Penyelenggara
+              </span>
+              <VerificationBadge status="NEEDS_CONFIRMATION" variant="dark" />
+            </div>
+
+            <h2 class="font-editorial text-2xl font-bold text-white">
+              {COMPANY_PROFILE.legalEntityName}
+            </h2>
+
+            <div class="grid grid-cols-1 gap-2 rounded-xl bg-white/5 p-3.5 text-xs text-ivory-100/90 border border-white/10">
+              {
+                COMPANY_LICENSES.slice(0, 2).map((lic) => (
+                  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-0.5">
+                    <span class="text-ivory-200/75">{lic.type} (Dokumen Klien):</span>
+                    <code class="font-mono font-semibold text-gold-300">{lic.number}</code>
+                  </div>
+                ))
+              }
+            </div>
+
+            <p class="text-xs leading-relaxed text-ivory-200/75">
+              Jadwal keberangkatan, ketersediaan akomodasi hotel, serta harga paket disesuaikan dengan kuota musim aktif dan dikonfirmasi melalui konsultan resmi.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Petunjuk Melanjutkan Scrolling -->
+    <div class="mt-12 flex justify-center">
+      <a
+        href="#profil"
+        aria-label="Gulir ke bagian profil perusahaan"
+        class="group inline-flex flex-col items-center gap-1.5 text-xs font-medium tracking-wider text-ivory-200/75 uppercase hover:text-gold-300 transition-colors"
+      >
+        <span>Gulir untuk mengenal Samira Travel</span>
+        <span class="flex h-8 w-8 items-center justify-center rounded-full border border-white/20 bg-white/5 transition-transform duration-300 group-hover:translate-y-1 group-hover:border-gold-300/60">
+          &darr;
+        </span>
+      </a>
+    </div>
+  </div>
+</section>

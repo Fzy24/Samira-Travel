@@ -1,0 +1,168 @@
+---
+/**
+ * Komponen ServicesSection (Bagian D pada Struktur Website).
+ * Menampilkan 3 kelompok layanan utama Samira Travel (Ibadah Umrah, Haji Khusus & Furoda, Halal Tour)
+ * beserta informasi umum Pembiayaan Syariah tanpa mempublikasikan tabel internal rahasia mitra.
+ */
+import { getMainServices, SYARIAH_FINANCING_INFO } from '../data/services';
+import { getOfficialWhatsAppUrl } from '../utils/whatsapp';
+import VerificationBadge from './VerificationBadge.astro';
+
+const services = getMainServices();
+---
+
+<section
+  id="layanan"
+  class="section-padding bg-white text-charcoal border-y border-navy-100/70"
+  aria-labelledby="layanan-heading"
+>
+  <div class="container-luxury">
+    <!-- Header Bagian -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+      <div class="max-w-3xl space-y-3">
+        <span class="badge-eyebrow">Layanan Utama</span>
+        <h2
+          id="layanan-heading"
+          class="font-editorial text-3xl font-bold text-navy-800 sm:text-4xl lg:text-5xl"
+        >
+          Tiga Kelompok Layanan Perjalanan Ibadah &amp; Wisata Muslim
+        </h2>
+        <p class="text-base sm:text-lg text-charcoal-muted leading-relaxed">
+          Setiap program dirancang dengan bimbingan ibadah terarah, pilihan fasilitas yang transparan, serta konsultasi jadwal langsung bersama tim resmi kami.
+        </p>
+      </div>
+      <a href="#paket" class="btn-primary-navy shrink-0 self-start md:self-auto">
+        <span>Bandingkan Tingkatan Paket</span>
+        <span aria-hidden="true">&darr;</span>
+      </a>
+    </div>
+
+    <!-- Kartu 3 Layanan Utama -->
+    <div class="mt-12 grid grid-cols-1 gap-8 lg:grid-cols-3">
+      {
+        services.map((service) => {
+          const serviceWaUrl = getOfficialWhatsAppUrl({
+            serviceName: service.whatsappContextName,
+          });
+          return (
+            <article class="card-surface card-surface-hover flex flex-col overflow-hidden">
+              <div class="relative h-56 overflow-hidden bg-navy-800">
+                <img
+                  src={service.imageUrl}
+                  alt={service.imageAlt}
+                  width="480"
+                  height="280"
+                  loading="lazy"
+                  class="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
+                />
+                <div class="absolute top-3 left-3">
+                  <VerificationBadge status={service.status} variant="dark" />
+                </div>
+              </div>
+
+              <div class="flex flex-1 flex-col justify-between p-6 sm:p-7 space-y-6">
+                <div class="space-y-4">
+                  <div>
+                    <h3 class="font-editorial text-2xl font-bold text-navy-800">
+                      {service.title}
+                    </h3>
+                    <p class="mt-1 text-xs font-medium text-royal-600">
+                      {service.subtitle}
+                    </p>
+                  </div>
+
+                  <p class="text-sm leading-relaxed text-charcoal-muted">
+                    {service.description}
+                  </p>
+
+                  <div class="space-y-2 pt-2">
+                    <p class="text-xs font-semibold uppercase tracking-wider text-navy-700">
+                      Manfaat &amp; Fokus Layanan:
+                    </p>
+                    <ul class="space-y-2 text-xs sm:text-sm text-charcoal-muted">
+                      {service.benefits.map((benefit) => (
+                        <li class="flex items-start gap-2">
+                          <span class="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-gold-500" aria-hidden="true" />
+                          <span>{benefit}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="space-y-4 pt-4 border-t border-navy-100">
+                  <p class="rounded-xl bg-ivory-100 p-3 text-xs leading-relaxed text-charcoal-muted">
+                    <strong class="text-navy-800">Keterangan Ketersediaan:</strong> {service.availabilityNotice}
+                  </p>
+
+                  <div class="flex flex-col sm:flex-row gap-2.5">
+                    <a
+                      href={serviceWaUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="btn-primary-gold flex-1 !py-2.5 !text-xs"
+                    >
+                      <span>Konsultasi {service.shortTitle}</span>
+                    </a>
+                    <button
+                      type="button"
+                      data-open-consultation-modal
+                      data-context-service={service.title}
+                      class="rounded-xl border border-navy-200 px-3.5 py-2.5 text-xs font-semibold text-navy-800 transition-colors hover:bg-navy-50"
+                    >
+                      Detail Pesan
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </article>
+          );
+        })
+      }
+    </div>
+
+    <!-- Banner Informasi Opsi Pembiayaan Syariah (Tanpa Tabel Konfidensial Mitra) -->
+    <div class="mt-12 rounded-2xl border border-gold-300/60 bg-ivory-100 p-6 sm:p-8 lg:p-10">
+      <div class="grid grid-cols-1 gap-8 lg:grid-cols-12 items-center">
+        <div class="lg:col-span-8 space-y-3">
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="badge-eyebrow">Solusi Perencanaan Ibadah</span>
+            <VerificationBadge status={SYARIAH_FINANCING_INFO.status} />
+          </div>
+          <h3 class="font-editorial text-2xl sm:text-3xl font-bold text-navy-800">
+            {SYARIAH_FINANCING_INFO.title}
+          </h3>
+          <p class="text-sm sm:text-base text-charcoal-muted leading-relaxed">
+            {SYARIAH_FINANCING_INFO.description}
+          </p>
+          <ul class="grid grid-cols-1 gap-2 pt-2 sm:grid-cols-3 text-xs text-charcoal-muted">
+            {
+              SYARIAH_FINANCING_INFO.generalHighlights.map((item) => (
+                <li class="rounded-xl border border-navy-100 bg-white p-3">
+                  {item}
+                </li>
+              ))
+            }
+          </ul>
+          <p class="text-xs text-charcoal-muted/85 pt-1">
+            {SYARIAH_FINANCING_INFO.confidentialityNotice}
+          </p>
+        </div>
+
+        <div class="lg:col-span-4 flex flex-col items-start lg:items-end justify-center gap-3">
+          <a
+            href={getOfficialWhatsAppUrl({
+              serviceName: 'Konsultasi Prosedur Pembiayaan Umrah Syariah',
+            })}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-primary-navy w-full sm:w-auto"
+          >
+            <span>Tanyakan Prosedur Pembiayaan</span>
+            <span aria-hidden="true">&rarr;</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

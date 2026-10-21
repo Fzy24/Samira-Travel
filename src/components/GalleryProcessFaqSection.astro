@@ -1,0 +1,499 @@
+---
+/**
+ * Komponen GalleryProcessFaqSection (Bagian J, K, L, M, dan N pada Struktur Website).
+ * Menggabungkan secara modular:
+ * - Bagian J: Galeri responsif dengan pemisahan Dokumentasi Perusahaan vs Foto Referensi Hotel dan lightbox keyboard-accessible.
+ * - Bagian K: Pemberitahuan status Testimoni (disembunyikan/ditandai dalam Mode Demo tanpa ulasan fiktif).
+ * - Bagian L: Alur Pendaftaran 5 Tahap.
+ * - Bagian M: Accordion FAQ interaktif dan aksesibel.
+ * - Bagian N: Seksi Kontak & CTA Akhir.
+ */
+import { SITE_CONFIG, isDemoModeEnabled } from '../data/site-config';
+import { GALLERY_ITEMS, REGISTRATION_STEPS } from '../data/company';
+import { getFaqItems } from '../data/faq';
+import { getSocialLinks } from '../data/social-links';
+import { getOfficialWhatsAppUrl } from '../utils/whatsapp';
+import VerificationBadge from './VerificationBadge.astro';
+
+const faqItems = getFaqItems();
+const socialLinks = getSocialLinks();
+const demoMode = isDemoModeEnabled();
+const contactWaUrl = getOfficialWhatsAppUrl();
+---
+
+<!-- BAGIAN J & K: GALERI & CATATAN TESTIMONI -->
+<section
+  id="galeri"
+  class="section-padding bg-white text-charcoal border-t border-navy-100/70"
+  aria-labelledby="galeri-heading"
+>
+  <div class="container-luxury">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+      <div class="max-w-3xl space-y-3">
+        <span class="badge-eyebrow">Galeri &amp; Dokumentasi</span>
+        <h2
+          id="galeri-heading"
+          class="font-editorial text-3xl font-bold text-navy-800 sm:text-4xl lg:text-5xl"
+        >
+          Dokumentasi Perusahaan &amp; Visual Akomodasi Referensi
+        </h2>
+        <p class="text-base sm:text-lg text-charcoal-muted leading-relaxed">
+          Setiap foto diberi penanda kategori sumber secara jelas untuk membedakan dokumentasi kegiatan perusahaan dari foto referensi fasilitas hotel pada materi produk.
+        </p>
+      </div>
+
+      <!-- Filter Kategori Galeri -->
+      <div class="flex flex-wrap gap-2" role="group" aria-label="Filter kategori galeri">
+        <button
+          type="button"
+          data-gallery-filter="ALL"
+          aria-pressed="true"
+          class="rounded-xl border border-navy-700 bg-navy-700 px-3.5 py-2 text-xs font-semibold text-white"
+        >
+          Semua Foto ({GALLERY_ITEMS.length})
+        </button>
+        <button
+          type="button"
+          data-gallery-filter="DOKUMENTASI_PERUSAHAAN"
+          aria-pressed="false"
+          class="rounded-xl border border-navy-200 bg-ivory-50 px-3.5 py-2 text-xs font-semibold text-navy-800 hover:bg-navy-50"
+        >
+          Dokumentasi Perusahaan
+        </button>
+        <button
+          type="button"
+          data-gallery-filter="REFERENSI_AKOMODASI"
+          aria-pressed="false"
+          class="rounded-xl border border-navy-200 bg-ivory-50 px-3.5 py-2 text-xs font-semibold text-navy-800 hover:bg-navy-50"
+        >
+          Referensi Hotel &amp; Haram
+        </button>
+      </div>
+    </div>
+
+    <!-- Grid Galeri -->
+    <div class="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        GALLERY_ITEMS.map((item) => (
+          <figure
+            data-gallery-item
+            data-gallery-category={item.category}
+            class="card-surface card-surface-hover group overflow-hidden flex flex-col justify-between"
+          >
+            <div>
+              <button
+                type="button"
+                data-lightbox-trigger
+                data-lightbox-src={item.imageUrl}
+                data-lightbox-alt={item.imageAlt}
+                data-lightbox-title={item.title}
+                data-lightbox-caption={`${item.caption} (${item.sourceSlide})`}
+                class="relative block h-56 w-full overflow-hidden bg-navy-900 text-left focus:outline-none"
+                aria-label={`Perbesar foto ${item.title}`}
+              >
+                <img
+                  src={item.imageUrl}
+                  alt={item.imageAlt}
+                  width="460"
+                  height="280"
+                  loading="lazy"
+                  class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <span class="absolute top-3 left-3 rounded-lg bg-navy-900/90 px-2.5 py-1 text-[11px] font-semibold text-gold-300 backdrop-blur-sm">
+                  {item.sourceTypeLabel}
+                </span>
+                <span class="absolute bottom-3 right-3 rounded-lg bg-black/60 px-2.5 py-1 text-[11px] font-medium text-white opacity-0 transition-opacity group-hover:opacity-100">
+                  Klik untuk perbesar
+                </span>
+              </button>
+
+              <figcaption class="p-5 space-y-2">
+                <div class="flex items-center justify-between gap-2">
+                  <h3 class="font-editorial text-xl font-bold text-navy-800">
+                    {item.title}
+                  </h3>
+                  <VerificationBadge status={item.status} />
+                </div>
+                <p class="text-xs leading-relaxed text-charcoal-muted">
+                  {item.caption}
+                </p>
+              </figcaption>
+            </div>
+            <div class="px-5 pb-4 text-[11px] text-charcoal-muted border-t border-navy-50 pt-2.5">
+              Sumber: {item.sourceSlide}
+            </div>
+          </figure>
+        ))
+      }
+    </div>
+
+    <!-- Bagian K: Kebijakan Kejujuran Testimoni dalam Mode Demo -->
+    {
+      demoMode && (
+        <div class="mt-12 rounded-2xl border border-dashed border-navy-200 bg-ivory-50 p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <strong class="font-editorial text-xl font-bold text-navy-800">
+                Ruang Testimoni Jamaah (Disembunyikan pada Mode Demo)
+              </strong>
+              <VerificationBadge status="PLACEHOLDER" />
+            </div>
+            <p class="text-xs sm:text-sm text-charcoal-muted leading-relaxed">
+              Sesuai prinsip keaslian informasi, kami tidak menampilkan kutipan ulasan, nama jamaah, foto pelanggan, atau rating fiktif. Komponen testimoni akan diaktifkan setelah dokumentasi testimoni tertulis/video beserta persetujuan publikasi jamaah diterima dari klien.
+            </p>
+          </div>
+        </div>
+      )
+    }
+  </div>
+
+  <!-- Modal Lightbox Galeri Aksesibel -->
+  <div
+    id="gallery-lightbox-modal"
+    class="fixed inset-0 z-50 hidden items-center justify-center bg-navy-900/90 p-4 backdrop-blur-sm"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="lightbox-modal-title"
+  >
+    <div class="relative max-w-3xl w-full overflow-hidden rounded-2xl border border-white/20 bg-navy-800 text-white shadow-2xl">
+      <div class="flex items-center justify-between border-b border-white/10 px-5 py-3.5">
+        <h3 id="lightbox-modal-title" class="font-editorial text-xl font-bold text-gold-300">
+          Pratinjau Dokumentasi
+        </h3>
+        <button
+          type="button"
+          id="close-lightbox-btn"
+          class="rounded-lg border border-white/20 px-3 py-1 text-xs font-semibold text-white hover:bg-white/10"
+          aria-label="Tutup pratinjau gambar"
+        >
+          Tutup (Esc)
+        </button>
+      </div>
+      <div class="bg-navy-900 p-4 flex justify-center">
+        <img
+          id="lightbox-modal-img"
+          src=""
+          alt=""
+          class="max-h-[65vh] w-auto rounded-lg object-contain"
+        />
+      </div>
+      <p id="lightbox-modal-caption" class="px-5 py-3.5 text-xs text-ivory-200/90 border-t border-white/10"></p>
+    </div>
+  </div>
+</section>
+
+<!-- BAGIAN L: PROSES PENDAFTARAN 5 TAHAP -->
+<section
+  id="pendaftaran"
+  class="section-padding bg-ivory text-charcoal border-t border-navy-100/70"
+  aria-labelledby="pendaftaran-heading"
+>
+  <div class="container-luxury">
+    <div class="max-w-3xl space-y-3">
+      <span class="badge-eyebrow">Panduan Calon Jamaah</span>
+      <h2
+        id="pendaftaran-heading"
+        class="font-editorial text-3xl font-bold text-navy-800 sm:text-4xl lg:text-5xl"
+      >
+        Lima Tahapan Mudah Menuju Keberangkatan Ibadah
+      </h2>
+      <p class="text-base sm:text-lg text-charcoal-muted leading-relaxed">
+        Dirancang untuk memudahkan konsultasi awal tanpa meminta data pribadi sensitif di dalam website.
+      </p>
+    </div>
+
+    <ol class="mt-10 grid grid-cols-1 gap-6 md:grid-cols-3 lg:grid-cols-5">
+      {
+        REGISTRATION_STEPS.map((step) => (
+          <li class="card-surface p-6 flex flex-col justify-between relative">
+            <div class="space-y-3">
+              <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-navy-700 font-editorial text-xl font-bold text-gold-300">
+                0{step.stepNumber}
+              </span>
+              <h3 class="font-editorial text-xl font-bold text-navy-800">
+                {step.title}
+              </h3>
+              <p class="text-xs font-semibold text-royal-600">
+                {step.subtitle}
+              </p>
+              <p class="text-xs leading-relaxed text-charcoal-muted">
+                {step.description}
+              </p>
+            </div>
+            <p class="mt-4 pt-3 border-t border-navy-100 text-[11px] font-medium text-gold-700">
+              {step.StatusNote}
+            </p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<!-- BAGIAN M: PERTANYAAN YANG SERING DIAJUKAN (FAQ) -->
+<section
+  id="faq"
+  class="section-padding bg-white text-charcoal border-t border-navy-100/70"
+  aria-labelledby="faq-heading"
+>
+  <div class="container-luxury">
+    <div class="grid grid-cols-1 gap-10 lg:grid-cols-12 items-start">
+      <div class="lg:col-span-5 space-y-4">
+        <span class="badge-eyebrow">Pertanyaan Umum (FAQ)</span>
+        <h2
+          id="faq-heading"
+          class="font-editorial text-3xl font-bold text-navy-800 sm:text-4xl"
+        >
+          Informasi Penting Seputar Paket, Persyaratan &amp; Prosedur
+        </h2>
+        <p class="text-sm sm:text-base text-charcoal-muted leading-relaxed">
+          Temukan jawaban atas pertanyaan yang paling sering diajukan calon jamaah. Untuk rincian visa, kebijakan pembatalan/refund, dan jadwal terkini, tim kami siap menjelaskan secara langsung.
+        </p>
+        <div class="pt-2">
+          <a
+            href={contactWaUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-primary-navy"
+          >
+            <span>Ajukan Pertanyaan Lainnya</span>
+            <span aria-hidden="true">&rarr;</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="lg:col-span-7 space-y-3" id="faq-accordion-list">
+        {
+          faqItems.map((faq, idx) => (
+            <div class="rounded-2xl border border-navy-100 bg-ivory-50/70 overflow-hidden">
+              <h3>
+                <button
+                  type="button"
+                  data-faq-trigger
+                  aria-expanded={idx === 0 ? 'true' : 'false'}
+                  aria-controls={`faq-panel-${faq.id}`}
+                  id={`faq-btn-${faq.id}`}
+                  class="flex w-full items-center justify-between gap-4 px-6 py-4 text-left font-semibold text-navy-800 transition-colors hover:bg-ivory-100"
+                >
+                  <span>
+                    <span class="block text-[11px] font-bold uppercase tracking-wider text-royal-600">
+                      {faq.category}
+                    </span>
+                    <span class="mt-0.5 block text-sm sm:text-base font-bold text-navy-800">
+                      {faq.question}
+                    </span>
+                  </span>
+                  <span
+                    data-faq-icon
+                    class={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-navy-200 bg-white text-xs transition-transform duration-200 ${
+                      idx === 0 ? 'rotate-180' : ''
+                    }`}
+                    aria-hidden="true"
+                  >
+                    &#9662;
+                  </span>
+                </button>
+              </h3>
+              <div
+                id={`faq-panel-${faq.id}`}
+                role="region"
+                aria-labelledby={`faq-btn-${faq.id}`}
+                class={idx === 0 ? 'px-6 pb-5 pt-1 text-xs sm:text-sm leading-relaxed text-charcoal-muted border-t border-navy-100/60' : 'hidden px-6 pb-5 pt-1 text-xs sm:text-sm leading-relaxed text-charcoal-muted border-t border-navy-100/60'}
+              >
+                <p>{faq.answer}</p>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BAGIAN N: KONTAK DAN CTA AKHIR -->
+<section
+  id="kontak"
+  class="section-padding bg-royal-gradient text-white"
+  aria-labelledby="kontak-heading"
+>
+  <div class="container-luxury">
+    <div class="rounded-3xl border border-gold-400/35 bg-navy-900/75 p-8 sm:p-12 shadow-2xl backdrop-blur-md">
+      <div class="grid grid-cols-1 gap-10 lg:grid-cols-12 items-center">
+        <div class="lg:col-span-7 space-y-5">
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="badge-eyebrow-dark">Hubungi Kami</span>
+            <VerificationBadge status={SITE_CONFIG.whatsapp.status} variant="dark" />
+          </div>
+          <h2
+            id="kontak-heading"
+            class="font-editorial text-3xl font-bold text-white sm:text-4xl lg:text-5xl"
+          >
+            Siap Merencanakan Perjalanan Ibadah Bersama Keluarga?
+          </h2>
+          <p class="text-sm sm:text-base text-ivory-100/90 leading-relaxed max-w-2xl">
+            Diskusikan rencana waktu keberangkatan, pilihan tingkatan paket (Safara, Safawi, Sukari, atau Majol), serta persyaratan pendaftaran bersama konsultan resmi <strong>{SITE_CONFIG.brandName} ({SITE_CONFIG.legalEntityName})</strong>.
+          </p>
+
+          <div class="flex flex-col sm:flex-row gap-3.5 pt-2">
+            <a
+              href={contactWaUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn-primary-gold text-base"
+            >
+              <span>Chat WhatsApp: {SITE_CONFIG.whatsapp.displayNumber}</span>
+            </a>
+            <button
+              type="button"
+              data-open-consultation-modal
+              class="btn-secondary-outline text-base"
+            >
+              <span>Kustomisasi Pesan Berdasarkan Paket</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5 space-y-4 rounded-2xl border border-white/15 bg-white/5 p-6">
+          <h3 class="font-editorial text-2xl font-bold text-gold-300">
+            Informasi Kontak pada Dokumen Klien
+          </h3>
+          <dl class="space-y-3 text-xs sm:text-sm">
+            <div>
+              <dt class="text-ivory-200/70">Alamat Kantor Pusat (Slide 43):</dt>
+              <dd class="mt-0.5 font-medium text-white">{SITE_CONFIG.headOffice.addressPrimary}</dd>
+            </div>
+            <div>
+              <dt class="text-ivory-200/70">WhatsApp Konsultasi:</dt>
+              <dd class="mt-0.5 font-semibold text-gold-300">{SITE_CONFIG.whatsapp.displayNumber}</dd>
+            </div>
+            <div class="pt-2 border-t border-white/10">
+              <dt class="text-ivory-200/70 mb-2">Website &amp; Media Sosial Tercantum:</dt>
+              <dd class="grid grid-cols-1 gap-1.5 sm:grid-cols-2">
+                {
+                  socialLinks.map((soc) => (
+                    <a
+                      href={soc.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="rounded-lg border border-white/10 bg-navy-900/60 px-3 py-2 text-xs hover:border-gold-300/60 transition-colors"
+                    >
+                      <span class="block text-[10px] text-ivory-200/65">{soc.platform}</span>
+                      <span class="font-semibold text-gold-300">{soc.handle}</span>
+                    </a>
+                  ))
+                }
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  /**
+   * Mengatur filter kategori pada galeri foto serta fungsi buka/tutup modal lightbox
+   * dengan dukungan navigasi keyboard (Escape).
+   */
+  function setupGalleryAndLightbox(): void {
+    const filterButtons = document.querySelectorAll('[data-gallery-filter]');
+    const galleryItems = document.querySelectorAll('[data-gallery-item]');
+    const triggers = document.querySelectorAll('[data-lightbox-trigger]');
+    const modal = document.getElementById('gallery-lightbox-modal');
+    const closeBtn = document.getElementById('close-lightbox-btn');
+    const modalImg = document.getElementById('lightbox-modal-img') as HTMLImageElement | null;
+    const modalTitle = document.getElementById('lightbox-modal-title');
+    const modalCaption = document.getElementById('lightbox-modal-caption');
+
+    filterButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const category = btn.getAttribute('data-gallery-filter') || 'ALL';
+        filterButtons.forEach((b) => {
+          const active = b.getAttribute('data-gallery-filter') === category;
+          b.setAttribute('aria-pressed', String(active));
+          b.classList.toggle('bg-navy-700', active);
+          b.classList.toggle('text-white', active);
+          b.classList.toggle('border-navy-700', active);
+          b.classList.toggle('bg-ivory-50', !active);
+          b.classList.toggle('text-navy-800', !active);
+        });
+
+        galleryItems.forEach((item) => {
+          const el = item as HTMLElement;
+          const itemCat = el.getAttribute('data-gallery-category');
+          const show = category === 'ALL' || itemCat === category;
+          el.classList.toggle('hidden', !show);
+        });
+      });
+    });
+
+    if (!modal || !closeBtn || !modalImg || !modalTitle || !modalCaption) {
+      return;
+    }
+
+    /**
+     * Menutup modal lightbox galeri dan mengembalikan state tersembunyi.
+     */
+    function closeLightbox(): void {
+      if (!modal) return;
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    triggers.forEach((trigger) => {
+      trigger.addEventListener('click', () => {
+        const src = trigger.getAttribute('data-lightbox-src') || '';
+        const alt = trigger.getAttribute('data-lightbox-alt') || '';
+        const title = trigger.getAttribute('data-lightbox-title') || '';
+        const caption = trigger.getAttribute('data-lightbox-caption') || '';
+
+        modalImg.src = src;
+        modalImg.alt = alt;
+        modalTitle.textContent = title;
+        modalCaption.textContent = caption;
+
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        closeBtn.focus();
+      });
+    });
+
+    closeBtn.addEventListener('click', closeLightbox);
+    modal.addEventListener('click', (e: MouseEvent) => {
+      if (e.target === modal) closeLightbox();
+    });
+    window.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+        closeLightbox();
+      }
+    });
+  }
+
+  /**
+   * Mengatur interaksi buka/tutup pada komponen Accordion FAQ agar dapat diakses
+   * dengan klik maupun keyboard (Enter/Space).
+   */
+  function setupFaqAccordion(): void {
+    const triggers = document.querySelectorAll('[data-faq-trigger]');
+    triggers.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const isExpanded = btn.getAttribute('aria-expanded') === 'true';
+        const targetId = btn.getAttribute('aria-controls');
+        const panel = targetId ? document.getElementById(targetId) : null;
+        const icon = btn.querySelector('[data-faq-icon]');
+
+        btn.setAttribute('aria-expanded', String(!isExpanded));
+        if (panel) {
+          panel.classList.toggle('hidden', isExpanded);
+        }
+        if (icon) {
+          icon.classList.toggle('rotate-180', !isExpanded);
+        }
+      });
+    });
+  }
+
+  setupGalleryAndLightbox();
+  setupFaqAccordion();
+</script>

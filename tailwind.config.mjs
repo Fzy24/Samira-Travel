@@ -1,0 +1,86 @@
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
+  theme: {
+    extend: {
+      colors: {
+        navy: {
+          DEFAULT: '#081B3A',
+          50: '#F0F5FA',
+          100: '#DCE8F3',
+          200: '#B8D0E7',
+          500: '#163B6C',
+          600: '#102C52',
+          700: '#081B3A',
+          800: '#061329',
+          900: '#030B18',
+        },
+        royal: {
+          DEFAULT: '#103D78',
+          50: '#F0F7FC',
+          100: '#DCECF8',
+          400: '#2678BA',
+          500: '#1A67A8',
+          600: '#14528F',
+          700: '#103D78',
+          800: '#0B2B56',
+        },
+        electric: {
+          DEFAULT: '#1A67A8',
+          light: '#2D82C9',
+          dark: '#124D80',
+        },
+        turquoise: {
+          DEFAULT: '#45C6C6',
+          50: '#EFFAFA',
+          100: '#D4F3F3',
+          200: '#AAE7E7',
+          300: '#77D7D7',
+          400: '#45C6C6',
+          500: '#2CA8A8',
+          600: '#208787',
+          700: '#1A6B6B',
+        },
+        gold: {
+          DEFAULT: '#D7B56D',
+          50: '#FCF9F0',
+          100: '#F7EFE0',
+          200: '#EFE0BE',
+          300: '#E4CC96',
+          400: '#D7B56D',
+          500: '#C49B45',
+          600: '#A37D2C',
+          700: '#7E5E1D',
+        },
+        ivory: {
+          DEFAULT: '#F7F5EF',
+          50: '#FDFCFA',
+          100: '#F7F5EF',
+          200: '#EDE8DC',
+          300: '#DFD7C5',
+        },
+        charcoal: {
+          DEFAULT: '#202734',
+          muted: '#525B6C',
+          light: '#768194',
+        },
+      },
+      fontFamily: {
+        serif: ['"Cormorant Garamond"', 'Georgia', ' Cambria', 'serif'],
+        sans: ['"DM Sans"', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+      },
+      boxShadow: {
+        'luxury': '0 16px 40px -12px rgba(8, 27, 58, 0.08), 0 4px 16px -4px rgba(215, 181, 109, 0.08)',
+        'luxury-hover': '0 24px 48px -12px rgba(8, 27, 58, 0.16), 0 8px 24px -6px rgba(215, 181, 109, 0.16)',
+        'gold-glow': '0 0 28px rgba(215, 181, 109, 0.32)',
+        'turquoise-glow': '0 0 24px rgba(69, 198, 198, 0.25)',
+      },
+      backgroundImage: {
+        'royal-gradient': 'linear-gradient(135deg, #061329 0%, #081B3A 45%, #103D78 100%)',
+        'gold-gradient': 'linear-gradient(135deg, #E4CC96 0%, #D7B56D 50%, #C49B45 100%)',
+        'accent-gradient': 'linear-gradient(135deg, #103D78 0%, #1A67A8 55%, #45C6C6 100%)',
+      },
+    },
+  },
+  plugins: [],
+};

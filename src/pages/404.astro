@@ -1,0 +1,44 @@
+---
+/**
+ * Halaman 404 (Halaman Tidak Ditemukan).
+ * Membantu pengunjung kembali ke halaman utama atau langsung menghubungi layanan WhatsApp.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE_CONFIG } from '../data/site-config';
+import { getOfficialWhatsAppUrl } from '../utils/whatsapp';
+
+const waUrl = getOfficialWhatsAppUrl();
+---
+
+<BaseLayout
+  title={`Halaman Tidak Ditemukan | ${SITE_CONFIG.brandName}`}
+  description="Halaman yang Anda cari tidak ditemukan. Silakan kembali ke beranda Samira Travel."
+  currentPath="/404"
+>
+  <section class="section-padding bg-ivory text-charcoal">
+    <div class="container-luxury max-w-2xl text-center">
+      <div class="card-surface p-8 sm:p-12 space-y-5">
+        <span class="badge-eyebrow">404 — Halaman Tidak Ditemukan</span>
+        <h1 class="font-editorial text-3xl sm:text-4xl font-bold text-navy-800">
+          Maaf, Halaman yang Anda Tuju Tidak Tersedia
+        </h1>
+        <p class="text-sm sm:text-base text-charcoal-muted">
+          Silakan kembali ke halaman utama untuk melihat informasi profil perusahaan, pilihan paket umrah, referensi hotel, atau hubungi konsultan kami melalui WhatsApp.
+        </p>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+          <a href="/" class="btn-primary-navy w-full sm:w-auto">
+            <span>Kembali ke Beranda</span>
+          </a>
+          <a
+            href={waUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-primary-gold w-full sm:w-auto"
+          >
+            <span>Konsultasi via WhatsApp</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

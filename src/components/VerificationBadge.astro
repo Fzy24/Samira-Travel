@@ -1,0 +1,84 @@
+---
+/**
+ * Komponen VerificationBadge.
+ * Bertanggung jawab menampilkan penanda klasifikasi data ('VERIFIED', 'NEEDS_CONFIRMATION', 'PLACEHOLDER')
+ * ketika website berada dalam mode demo (DEMO_MODE) agar klien dapat membedakan data final dan data yang perlu dikonfirmasi.
+ */
+import {
+  isDemoModeEnabled,
+  getVerificationStatusLabel,
+  type VerificationStatus,
+} from '../data/site-config';
+
+interface Props {
+  status: VerificationStatus;
+  customLabel?: string;
+  titleNote?: string;
+  variant?: 'light' | 'dark';
+}
+
+const {
+  status,
+  customLabel,
+  titleNote,
+  variant = 'light',
+} = Astro.props;
+
+const showBadge = isDemoModeEnabled();
+const labelText = customLabel || getVerificationStatusLabel(status);
+
+/**
+ * Menentukan kelas warna badge sesuai status verifikasi dan latar belakang (light/dark).
+ *
+ * @param currentStatus Status verifikasi data.
+ * @param currentVariant Varian tema latar ('light' | 'dark').
+ * @returns String kelas Tailwind CSS untuk lencana verifikasi.
+ */
+function getBadgeClasses(
+  currentStatus: VerificationStatus,
+  currentVariant: 'light' | 'dark'
+): string {
+  if (currentVariant === 'dark') {
+    switch (currentStatus) {
+      case 'VERIFIED':
+        return 'border-turquoise-400/40 bg-turquoise-500/15 text-turquoise-200';
+      case 'NEEDS_CONFIRMATION':
+        return 'border-gold-400/45 bg-gold-400/15 text-gold-200';
+      case 'PLACEHOLDER':
+        return 'border-white/30 bg-white/10 text-ivory-200';
+    }
+  }
+
+  switch (currentStatus) {
+    case 'VERIFIED':
+      return 'border-turquoise-500/30 bg-turquoise-50 text-turquoise-700';
+    case 'NEEDS_CONFIRMATION':
+      return 'border-gold-500/35 bg-gold-50 text-gold-700';
+    case 'PLACEHOLDER':
+      return 'border-navy-200 bg-navy-50 text-navy-700';
+  }
+}
+
+const badgeClass = getBadgeClasses(status, variant);
+---
+
+{
+  showBadge && (
+    <span
+      class={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[11px] font-medium tracking-wide ${badgeClass}`}
+      title={titleNote || `Status Data Demo: ${labelText}`}
+    >
+      <span
+        class={`h-1.5 w-1.5 rounded-full ${
+          status === 'VERIFIED'
+            ? 'bg-turquoise-400'
+            : status === 'NEEDS_CONFIRMATION'
+              ? 'bg-gold-500'
+              : 'bg-navy-400'
+        }`}
+        aria-hidden="true"
+      />
+      <span>{labelText}</span>
+    </span>
+  )
+}

@@ -1,0 +1,256 @@
+---
+/**
+ * Komponen ConsultationModal.
+ * Menyediakan dialog interaktif aksesibel bagi calon jamaah untuk menyusun pesan WhatsApp
+ * sesuai konteks (layanan, tingkatan paket, dan kota keberangkatan) tanpa meminta data pribadi sensitif.
+ */
+import { SITE_CONFIG } from '../data/site-config';
+import { MAIN_SERVICES } from '../data/services';
+import { PACKAGE_TIERS } from '../data/packages';
+import { EMBARKATION_CITIES_IN_DOC } from '../data/branches';
+import { getOfficialWhatsAppUrl } from '../utils/whatsapp';
+
+const defaultWhatsAppUrl = getOfficialWhatsAppUrl();
+---
+
+<div
+  id="consultation-modal-backdrop"
+  class="fixed inset-0 z-50 hidden items-center justify-center bg-navy-900/75 p-4 backdrop-blur-sm"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="consultation-modal-title"
+>
+  <div class="relative w-full max-w-lg rounded-2xl border border-gold-400/35 bg-white p-6 sm:p-8 shadow-2xl text-charcoal">
+    <div class="flex items-start justify-between gap-4 border-b border-navy-100 pb-4">
+      <div>
+        <span class="badge-eyebrow">Konsultasi Terarah via WhatsApp</span>
+        <h2 id="consultation-modal-title" class="mt-2 font-editorial text-2xl sm:text-3xl font-bold text-navy-800">
+          Hubungi Konsultan {SITE_CONFIG.brandName}
+        </h2>
+      </div>
+      <button
+        type="button"
+        id="close-consultation-modal"
+        class="rounded-xl border border-navy-100 p-2 text-charcoal-muted transition-colors hover:bg-navy-50 hover:text-navy-800"
+        aria-label="Tutup jendela konsultasi"
+      >
+        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <form id="whatsapp-context-form" class="mt-5 space-y-4">
+      <div>
+        <label for="modal-visitor-name" class="block text-xs font-semibold uppercase tracking-wider text-navy-700">
+          Nama Sapaan Anda (Opsional)
+        </label>
+        <input
+          type="text"
+          id="modal-visitor-name"
+          name="visitorName"
+          placeholder="Contoh: Bapak Ahmad / Ibu Siti"
+          class="mt-1.5 w-full rounded-xl border border-navy-200 bg-ivory-50 px-3.5 py-2.5 text-sm text-charcoal focus:border-royal-500 focus:bg-white focus:outline-none"
+        />
+      </div>
+
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div>
+          <label for="modal-service-select" class="block text-xs font-semibold uppercase tracking-wider text-navy-700">
+            Kelompok Layanan
+          </label>
+          <select
+            id="modal-service-select"
+            name="serviceName"
+            class="mt-1.5 w-full rounded-xl border border-navy-200 bg-ivory-50 px-3.5 py-2.5 text-sm text-charcoal focus:border-royal-500 focus:bg-white focus:outline-none"
+          >
+            <option value="">Semua Layanan (Umum)</option>
+            {
+              MAIN_SERVICES.map((srv) => (
+                <option value={srv.title}>{srv.shortTitle}</option>
+              ))
+            }
+          </select>
+        </div>
+
+        <div>
+          <label for="modal-package-select" class="block text-xs font-semibold uppercase tracking-wider text-navy-700">
+            Tingkatan Paket Umrah
+          </label>
+          <select
+            id="modal-package-select"
+            name="packageName"
+            class="mt-1.5 w-full rounded-xl border border-navy-200 bg-ivory-50 px-3.5 py-2.5 text-sm text-charcoal focus:border-royal-500 focus:bg-white focus:outline-none"
+          >
+            <option value="">Belum Memilih / Ingin Rekomendasi</option>
+            {
+              PACKAGE_TIERS.map((pkg) => (
+                <option value={pkg.name}>{pkg.name} ({pkg.makkahHotelClass})</option>
+              ))
+            }
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <label for="modal-city-select" class="block text-xs font-semibold uppercase tracking-wider text-navy-700">
+          Kota Rencana Keberangkatan / Domisili
+        </label>
+        <select
+          id="modal-city-select"
+          name="departureCity"
+          class="mt-1.5 w-full rounded-xl border border-navy-200 bg-ivory-50 px-3.5 py-2.5 text-sm text-charcoal focus:border-royal-500 focus:bg-white focus:outline-none"
+        >
+          <option value="">Pilih Kota Keberangkatan (Opsional)</option>
+          {
+            EMBARKATION_CITIES_IN_DOC.map((city) => (
+              <option value={city}>{city}</option>
+            ))
+          }
+          <option value="Kota Lainnya">Kota Lainnya di Indonesia</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="modal-custom-question" class="block text-xs font-semibold uppercase tracking-wider text-navy-700">
+          Pertanyaan atau Kebutuhan Khusus (Opsional)
+        </label>
+        <textarea
+          id="modal-custom-question"
+          name="customQuestion"
+          rows="2"
+          placeholder="Misal: Rencana ibadah untuk 4 anggota keluarga termasuk lansia..."
+          class="mt-1.5 w-full rounded-xl border border-navy-200 bg-ivory-50 px-3.5 py-2 text-sm text-charcoal focus:border-royal-500 focus:bg-white focus:outline-none"
+        ></textarea>
+      </div>
+
+      <div class="rounded-xl border border-gold-300/60 bg-gold-50/70 p-3 text-xs text-charcoal-muted">
+        <strong class="text-navy-800">Catatan Privasi &amp; Mode Demo:</strong> Formulir ini tidak menyimpan data Anda ke database, melainkan menyusun format pesan WhatsApp otomatis ke nomor konfigurasi <strong>{SITE_CONFIG.whatsapp.displayNumber}</strong>.
+      </div>
+
+      <div class="flex flex-col sm:flex-row items-center justify-end gap-3 pt-2">
+        <a
+          id="modal-direct-wa-link"
+          href={defaultWhatsAppUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-wa-phone={SITE_CONFIG.whatsapp.internationalNumber}
+          class="btn-primary-gold w-full sm:w-auto"
+        >
+          <span>Lanjutkan ke WhatsApp</span>
+          <span aria-hidden="true">&rarr;</span>
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  /**
+   * Mengelola pembukaan modal konsultasi WhatsApp, prapengisian konteks dari tombol pemanggil,
+   * serta pembaruan URL WhatsApp secara dinamis sesuai input pengguna.
+   */
+  function setupConsultationModal(): void {
+    const backdrop = document.getElementById('consultation-modal-backdrop');
+    const closeBtn = document.getElementById('close-consultation-modal');
+    const openTriggers = document.querySelectorAll('[data-open-consultation-modal]');
+    const form = document.getElementById('whatsapp-context-form') as HTMLFormElement | null;
+    const submitLink = document.getElementById('modal-direct-wa-link') as HTMLAnchorElement | null;
+
+    const nameInput = document.getElementById('modal-visitor-name') as HTMLInputElement | null;
+    const serviceSelect = document.getElementById('modal-service-select') as HTMLSelectElement | null;
+    const packageSelect = document.getElementById('modal-package-select') as HTMLSelectElement | null;
+    const citySelect = document.getElementById('modal-city-select') as HTMLSelectElement | null;
+    const questionInput = document.getElementById('modal-custom-question') as HTMLTextAreaElement | null;
+
+    if (!backdrop || !closeBtn || !form || !submitLink) {
+      return;
+    }
+
+    const phone = submitLink.getAttribute('data-wa-phone') || '6281236661876';
+
+    /**
+     * Memperbarui atribut href pada tombol kirim WhatsApp berdasarkan pilihan pengguna di modal.
+     */
+    function updateDynamicWhatsAppHref(): void {
+      if (!submitLink) return;
+      const visitorName = nameInput?.value.trim() || '';
+      const serviceName = serviceSelect?.value || '';
+      const packageName = packageSelect?.value || '';
+      const departureCity = citySelect?.value || '';
+      const customQuestion = questionInput?.value.trim() || '';
+
+      const greeting = visitorName
+        ? `Halo Samira Travel, perkenalkan saya ${visitorName}.`
+        : 'Halo Samira Travel,';
+
+      const parts: string[] = [];
+      if (packageName) parts.push(`tingkatan *${packageName}*`);
+      if (serviceName) parts.push(`layanan *${serviceName}*`);
+      if (departureCity) parts.push(`rencana keberangkatan dari *${departureCity}*`);
+
+      const contextText =
+        parts.length > 0
+          ? ` Saya ingin berkonsultasi mengenai ${parts.join(' untuk ')}.`
+          : ' Saya ingin mengetahui informasi lebih lanjut mengenai layanan dan paket perjalanan ibadah yang tersedia.';
+
+      const extraText = customQuestion ? ` Pertanyaan saya: "${customQuestion}".` : '';
+      const finalMessage = `${greeting}${contextText}${extraText} Mohon informasi mengenai jadwal terbaru yang tersedia, rincian fasilitas, estimasi biaya aktual, serta prosedur pendaftaran resminya. Terima kasih.`;
+
+      submitLink.href = `https://wa.me/${phone}?text=${encodeURIComponent(finalMessage)}`;
+    }
+
+    /**
+     * Membuka atau menutup dialog modal konsultasi WhatsApp.
+     *
+     * @param open Boolean status tampil atau sembunyi.
+     */
+    function toggleModal(open: boolean): void {
+      if (!backdrop) return;
+      backdrop.classList.toggle('hidden', !open);
+      backdrop.classList.toggle('flex', open);
+      if (open) {
+        updateDynamicWhatsAppHref();
+        nameInput?.focus();
+      }
+    }
+
+    openTriggers.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const presetService = btn.getAttribute('data-context-service');
+        const presetPackage = btn.getAttribute('data-context-package');
+        const presetCity = btn.getAttribute('data-context-city');
+
+        if (presetService && serviceSelect) serviceSelect.value = presetService;
+        if (presetPackage && packageSelect) packageSelect.value = presetPackage;
+        if (presetCity && citySelect) citySelect.value = presetCity;
+
+        toggleModal(true);
+      });
+    });
+
+    closeBtn.addEventListener('click', () => toggleModal(false));
+
+    backdrop.addEventListener('click', (e: MouseEvent) => {
+      if (e.target === backdrop) {
+        toggleModal(false);
+      }
+    });
+
+    window.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && !backdrop.classList.contains('hidden')) {
+        toggleModal(false);
+      }
+    });
+
+    form.addEventListener('input', updateDynamicWhatsAppHref);
+    form.addEventListener('change', updateDynamicWhatsAppHref);
+    form.addEventListener('submit', (e: SubmitEvent) => {
+      e.preventDefault();
+      updateDynamicWhatsAppHref();
+      window.open(submitLink.href, '_blank', 'noopener,noreferrer');
+    });
+  }
+
+  setupConsultationModal();
+</script>

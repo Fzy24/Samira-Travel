@@ -1,0 +1,163 @@
+---
+/**
+ * Komponen Footer.
+ * Menampilkan identitas lengkap perusahaan (PT Samira Ali Wisata), alamat kantor pusat,
+ * nomor WhatsApp dari konfigurasi terpusat, tautan akun media sosial resmi,
+ * navigasi sekunder, tautan kebijakan privasi & syarat ketentuan, serta catatan tata kelola data.
+ */
+import { SITE_CONFIG } from '../data/site-config';
+import { COMPANY_LICENSES } from '../data/company';
+import { getSocialLinks } from '../data/social-links';
+import { getOfficialWhatsAppUrl } from '../utils/whatsapp';
+import VerificationBadge from './VerificationBadge.astro';
+
+const socialLinks = getSocialLinks();
+const whatsappFooterUrl = getOfficialWhatsAppUrl();
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="border-t border-gold-400/25 bg-navy-800 text-ivory-100">
+  <div class="container-luxury py-16">
+    <div class="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-12">
+      <!-- Kolom 1: Identitas Brand & Legalitas (5 cols) -->
+      <div class="lg:col-span-5 space-y-4">
+        <div class="flex items-center gap-3.5">
+          <div class="rounded-xl border border-gold-400/40 bg-navy-900 px-2.5 py-1.5">
+            <img
+              src="/images/logo/samira-logo-badge.webp"
+              alt={`Logo ${SITE_CONFIG.brandName}`}
+              width="124"
+              height="45"
+              loading="lazy"
+              class="h-10 w-auto object-contain"
+            />
+          </div>
+          <div>
+            <p class="font-editorial text-2xl font-bold tracking-wide text-white">
+              {SITE_CONFIG.brandName}
+            </p>
+            <p class="text-xs font-semibold uppercase tracking-wider text-gold-300">
+              {SITE_CONFIG.legalEntityName}
+            </p>
+          </div>
+        </div>
+
+        <p class="text-sm leading-relaxed text-ivory-200/85 max-w-md">
+          {SITE_CONFIG.tagline}. Penyelenggara perjalanan ibadah umrah, haji khusus &amp; Furoda, serta halal tour dengan fokus pada kenyamanan ibadah keluarga dan ketertiban prosedur.
+        </p>
+
+        <div class="rounded-xl border border-white/10 bg-navy-900/70 p-4 space-y-2">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <span class="text-xs font-semibold uppercase tracking-wider text-gold-300">
+              Data Izin pada Dokumen Klien
+            </span>
+            <VerificationBadge status="NEEDS_CONFIRMATION" variant="dark" />
+          </div>
+          <ul class="space-y-1 text-xs text-ivory-200/90">
+            {
+              COMPANY_LICENSES.slice(0, 2).map((lic) => (
+                <li>
+                  <strong class="text-white">{lic.type}:</strong> {lic.number} ({lic.yearMentioned})
+                </li>
+              ))
+            }
+          </ul>
+          <p class="text-[11px] leading-normal text-ivory-200/65">
+            Nomor izin di atas dikutip dari dokumen Product Knowledge klien dan perlu dikonfirmasi kembali sebelum peluncuran publik.
+          </p>
+        </div>
+      </div>
+
+      <!-- Kolom 2: Navigasi Bagian & Halaman (3 cols) -->
+      <div class="lg:col-span-3 space-y-4">
+        <h2 class="font-editorial text-xl font-semibold text-gold-300">
+          Navigasi Informasi
+        </h2>
+        <ul class="grid grid-cols-2 gap-2 text-sm text-ivory-200/85 sm:grid-cols-1">
+          <li><a href="/#profil" class="hover:text-gold-300 transition-colors">Profil Perusahaan</a></li>
+          <li><a href="/#layanan" class="hover:text-gold-300 transition-colors">Layanan Utama</a></li>
+          <li><a href="/#paket" class="hover:text-gold-300 transition-colors">Tingkatan Paket Umrah</a></li>
+          <li><a href="/#keunggulan" class="hover:text-gold-300 transition-colors">Keunggulan Layanan</a></li>
+          <li><a href="/#rekam-jejak" class="hover:text-gold-300 transition-colors">Legalitas &amp; Rekam Jejak</a></li>
+          <li><a href="/#hotel-fasilitas" class="hover:text-gold-300 transition-colors">Referensi Hotel &amp; Maskapai</a></li>
+          <li><a href="/#cabang" class="hover:text-gold-300 transition-colors">Jaringan Kantor Cabang</a></li>
+          <li><a href="/#pendaftaran" class="hover:text-gold-300 transition-colors">Alur Pendaftaran</a></li>
+          <li><a href="/#faq" class="hover:text-gold-300 transition-colors">Pertanyaan Umum (FAQ)</a></li>
+        </ul>
+      </div>
+
+      <!-- Kolom 3: Kantor Pusat, Kontak & Media Sosial (4 cols) -->
+      <div class="lg:col-span-4 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <h2 class="font-editorial text-xl font-semibold text-gold-300">
+            Kantor Pusat &amp; Kontak
+          </h2>
+          <VerificationBadge status={SITE_CONFIG.headOffice.status} variant="dark" />
+        </div>
+
+        <address class="not-italic text-sm leading-relaxed text-ivory-200/90 space-y-2">
+          <p class="font-semibold text-white">{SITE_CONFIG.legalEntityName}</p>
+          <p>{SITE_CONFIG.headOffice.addressPrimary}</p>
+          <p class="text-xs text-ivory-200/65">
+            Catatan dokumen: Pada sejumlah halaman materi juga tertulis {SITE_CONFIG.headOffice.addressAlternateInDoc}.
+          </p>
+        </address>
+
+        <div class="pt-1 space-y-2">
+          <p class="text-xs font-semibold uppercase tracking-wider text-turquoise-300">
+            Jalur Konsultasi WhatsApp
+          </p>
+          <a
+            href={whatsappFooterUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2.5 rounded-xl border border-gold-400/40 bg-gold-400/15 px-4 py-2.5 text-sm font-semibold text-gold-200 transition-colors hover:bg-gold-400/25"
+          >
+            <span>WhatsApp: {SITE_CONFIG.whatsapp.displayNumber}</span>
+          </a>
+        </div>
+
+        <div class="pt-2 space-y-2">
+          <p class="text-xs font-semibold uppercase tracking-wider text-ivory-200/75">
+            Kanal Digital Tercantum di Dokumen
+          </p>
+          <ul class="space-y-1.5 text-xs text-ivory-200/85">
+            {
+              socialLinks.map((social) => (
+                <li class="flex items-center justify-between gap-2 border-b border-white/5 pb-1">
+                  <span class="text-ivory-200/70">{social.platform}:</span>
+                  <a
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="font-medium text-gold-300 hover:underline"
+                  >
+                    {social.handle}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Baris Bawah: Hak Cipta & Kebijakan -->
+    <div class="mt-12 border-t border-white/10 pt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between text-xs text-ivory-200/70">
+      <p>
+        &copy; {currentYear} {SITE_CONFIG.brandName} ({SITE_CONFIG.legalEntityName}). Seluruh informasi mengacu pada dokumentasi produk perusahaan dan menunggu verifikasi rilis publik.
+      </p>
+      <div class="flex flex-wrap items-center gap-4">
+        <a href="/kebijakan-privasi" class="hover:text-gold-300 transition-colors underline-offset-4 hover:underline">
+          Kebijakan Privasi
+        </a>
+        <a href="/syarat-ketentuan" class="hover:text-gold-300 transition-colors underline-offset-4 hover:underline">
+          Ketentuan Informasi
+        </a>
+        <a href="/#kontak" class="hover:text-gold-300 transition-colors underline-offset-4 hover:underline">
+          Hubungi Kami
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>

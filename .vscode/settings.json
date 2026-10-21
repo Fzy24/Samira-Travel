@@ -1,0 +1,4 @@
+{
+    "diffEditor.experimental.showMoves": false,
+    "typescript.tsdk": "node_modules/typescript/lib"
+}

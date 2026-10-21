@@ -1,0 +1,163 @@
+---
+/**
+ * Komponen CompanyProfileSection (Bagian C pada Struktur Website).
+ * Menampilkan ringkasan profil PT Samira Ali Wisata, latar belakang sejarah berdasarkan dokumen klien,
+ * profil pendiri (Ust. Fauzi Wahyu Muntoro), lini masa perkembangan, serta status komitmen pelayanan.
+ */
+import { COMPANY_PROFILE, COMPANY_MILESTONES } from '../data/company';
+import VerificationBadge from './VerificationBadge.astro';
+---
+
+<section
+  id="profil"
+  class="section-padding bg-ivory text-charcoal"
+  aria-labelledby="profil-heading"
+>
+  <div class="container-luxury">
+    <!-- Header Bagian -->
+    <div class="max-w-3xl space-y-3">
+      <div class="flex flex-wrap items-center gap-2">
+        <span class="badge-eyebrow">Tentang Perusahaan</span>
+        <VerificationBadge status="NEEDS_CONFIRMATION" />
+      </div>
+      <h2
+        id="profil-heading"
+        class="font-editorial text-3xl font-bold text-navy-800 sm:text-4xl lg:text-5xl"
+      >
+        Mengenal {COMPANY_PROFILE.brandName} &amp; {COMPANY_PROFILE.legalEntityName}
+      </h2>
+      <p class="text-base sm:text-lg text-charcoal-muted leading-relaxed">
+        {COMPANY_PROFILE.taglinePrimary} — melayani perencanaan dan pendampingan ibadah sejak tahap pendaftaran hingga kembali ke rumah.
+      </p>
+    </div>
+
+    <!-- Grid Utama: Narasi & Komitmen (7 Kolom) + Profil Pendiri (5 Kolom) -->
+    <div class="mt-12 grid grid-cols-1 gap-10 lg:grid-cols-12 items-start">
+      <div class="lg:col-span-7 space-y-6">
+        <div class="card-surface p-6 sm:p-8 space-y-4">
+          <h3 class="font-editorial text-2xl font-bold text-navy-800">
+            Latar Belakang Perusahaan
+          </h3>
+          {
+            COMPANY_PROFILE.overviewParagraphs.map((paragraph) => (
+              <p class="text-sm sm:text-base leading-relaxed text-charcoal-muted">
+                {paragraph}
+              </p>
+            ))
+          }
+
+          <div class="grid grid-cols-1 gap-4 pt-4 sm:grid-cols-3 border-t border-navy-100">
+            <div class="rounded-xl bg-ivory-100 p-4">
+              <span class="text-xs font-semibold uppercase tracking-wider text-charcoal-muted">
+                Badan Usaha
+              </span>
+              <p class="mt-1 font-bold text-navy-800">{COMPANY_PROFILE.legalEntityName}</p>
+            </div>
+            <div class="rounded-xl bg-ivory-100 p-4">
+              <span class="text-xs font-semibold uppercase tracking-wider text-charcoal-muted">
+                Dirintis Tahun
+              </span>
+              <p class="mt-1 font-bold text-navy-800">
+                {COMPANY_PROFILE.foundedYear.value} (Materi Klien)
+              </p>
+            </div>
+            <div class="rounded-xl bg-ivory-100 p-4">
+              <span class="text-xs font-semibold uppercase tracking-wider text-charcoal-muted">
+                Pembaruan Izin
+              </span>
+              <p class="mt-1 font-bold text-navy-800">
+                {COMPANY_PROFILE.licensedYear.value} &amp; {COMPANY_PROFILE.renewalYear.value}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Komitmen Layanan & Placeholder Visi Misi -->
+        <div class="card-surface p-6 sm:p-8 border-l-4 border-l-gold-400 space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <h3 class="font-editorial text-2xl font-bold text-navy-800">
+              {COMPANY_PROFILE.serviceCommitmentNote.title}
+            </h3>
+            <VerificationBadge status={COMPANY_PROFILE.serviceCommitmentNote.visionMissionStatus} />
+          </div>
+          <p class="text-sm sm:text-base leading-relaxed text-charcoal-muted">
+            {COMPANY_PROFILE.serviceCommitmentNote.description}
+          </p>
+          <p class="rounded-xl bg-gold-50/80 border border-gold-200 px-4 py-3 text-xs text-gold-700 leading-relaxed">
+            <strong>Catatan Tata Kelola Konten:</strong> {COMPANY_PROFILE.serviceCommitmentNote.visionMissionNote}
+          </p>
+        </div>
+      </div>
+
+      <!-- Kartu Profil Pendiri -->
+      <div class="lg:col-span-5">
+        <div class="card-surface overflow-hidden">
+          <div class="bg-royal-gradient p-6 text-white">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-xs font-semibold uppercase tracking-wider text-gold-300">
+                Profil Pendiri &amp; Pimpinan
+              </span>
+              <VerificationBadge status={COMPANY_PROFILE.founder.status} variant="dark" />
+            </div>
+            <h3 class="mt-2 font-editorial text-2xl font-bold text-white">
+              {COMPANY_PROFILE.founder.name}
+            </h3>
+            <p class="text-xs font-medium text-ivory-200/85">
+              {COMPANY_PROFILE.founder.role}
+            </p>
+          </div>
+
+          <div class="p-6 space-y-5">
+            <div class="overflow-hidden rounded-xl border border-navy-100 bg-navy-800">
+              <img
+                src={COMPANY_PROFILE.founder.photoUrl}
+                alt={COMPANY_PROFILE.founder.photoAlt}
+                width="440"
+                height="520"
+                loading="lazy"
+                class="h-72 w-full object-cover object-top"
+              />
+            </div>
+
+            <p class="text-sm leading-relaxed text-charcoal-muted">
+              {COMPANY_PROFILE.founder.bioSummary}
+            </p>
+
+            <div class="rounded-xl bg-ivory-100 p-3.5 text-xs text-charcoal-muted">
+              Sumber data: {COMPANY_PROFILE.founder.sourceSlide}. Foto dan jabatan ditampilkan sesuai materi presentasi perusahaan.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lini Masa Sejarah Singkat -->
+    <div class="mt-12">
+      <h3 class="font-editorial text-2xl font-bold text-navy-800">
+        Jejak Perkembangan dalam Dokumen Klien
+      </h3>
+      <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        {
+          COMPANY_MILESTONES.map((milestone) => (
+            <div class="card-surface p-5 flex flex-col justify-between">
+              <div>
+                <span class="inline-block rounded-lg bg-navy-700 px-3 py-1 font-editorial text-lg font-bold text-gold-300">
+                  {milestone.year}
+                </span>
+                <h4 class="mt-3 font-editorial text-xl font-bold text-navy-800">
+                  {milestone.title}
+                </h4>
+                <p class="mt-2 text-xs leading-relaxed text-charcoal-muted">
+                  {milestone.description}
+                </p>
+              </div>
+              <div class="mt-4 pt-3 border-t border-navy-50">
+                <VerificationBadge status={milestone.status} />
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>

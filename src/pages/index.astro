@@ -1,0 +1,28 @@
+---
+/**
+ * Halaman Utama (Homepage) Samira Travel — PT Samira Ali Wisata.
+ * Menyusun seluruh bagian struktur company profile (Hero, Profil, Layanan, Paket & Fasilitas,
+ * Keunggulan & Legalitas, Hotel & Maskapai, Jaringan Cabang, Galeri, Alur Pendaftaran, FAQ, dan Kontak)
+ * secara modular dengan dukungan anchor navigation.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroSection from '../components/HeroSection.astro';
+import CompanyProfileSection from '../components/CompanyProfileSection.astro';
+import ServicesSection from '../components/ServicesSection.astro';
+import PackagesSection from '../components/PackagesSection.astro';
+import WhyChooseSection from '../components/WhyChooseSection.astro';
+import HotelsAirlinesSection from '../components/HotelsAirlinesSection.astro';
+import BranchesSection from '../components/BranchesSection.astro';
+import GalleryProcessFaqSection from '../components/GalleryProcessFaqSection.astro';
+---
+
+<BaseLayout currentPath="/">
+  <HeroSection />
+  <CompanyProfileSection />
+  <ServicesSection />
+  <PackagesSection />
+  <WhyChooseSection />
+  <HotelsAirlinesSection />
+  <BranchesSection />
+  <GalleryProcessFaqSection />
+</BaseLayout>

@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-midnight: #081B3A;
+  --color-royal: #103D78;
+  --color-electric: #1A67A8;
+  --color-turquoise: #45C6C6;
+  --color-gold: #D7B56D;
+  --color-ivory: #F7F5EF;
+  --color-white: #FFFFFF;
+  --color-charcoal: #202734;
+}
+
+@layer base {
+  html {
+    background-color: var(--color-ivory);
+    color: var(--color-charcoal);
+    font-family: 'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  body {
+    min-height: 100vh;
+    overflow-x: hidden;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, .font-editorial {
+    font-family: 'Cormorant Garamond', Georgia, Cambria, serif;
+  }
+
+  /* State fokus keyboard yang jelas untuk aksesibilitas */
+  :focus-visible {
+    outline: 2px solid var(--color-turquoise);
+    outline-offset: 3px;
+  }
+}
+
+@layer components {
+  .container-luxury {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .section-padding {
+    @apply py-16 sm:py-20 lg:py-24;
+  }
+
+  .card-surface {
+    @apply rounded-2xl border border-navy-100/80 bg-white shadow-luxury transition-all duration-300;
+  }
+
+  .card-surface-hover {
+    @apply hover:-translate-y-1 hover:border-gold-300/80 hover:shadow-luxury-hover;
+  }
+
+  .btn-primary-gold {
+    @apply inline-flex items-center justify-center gap-2.5 rounded-xl bg-gold-400 px-6 py-3.5 text-sm font-semibold text-navy-800 shadow-sm transition-all duration-200 hover:bg-gold-300 hover:shadow-gold-glow active:translate-y-0;
+  }
+
+  .btn-primary-navy {
+    @apply inline-flex items-center justify-center gap-2.5 rounded-xl bg-navy-700 px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-royal-700 hover:shadow-md active:translate-y-0;
+  }
+
+  .btn-secondary-outline {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-white/30 bg-white/10 px-6 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition-all duration-200 hover:border-gold-300/70 hover:bg-white/20;
+  }
+
+  .badge-eyebrow {
+    @apply inline-flex items-center gap-2 rounded-full border border-gold-400/40 bg-gold-50 px-3.5 py-1 text-xs font-semibold uppercase tracking-wider text-gold-700;
+  }
+
+  .badge-eyebrow-dark {
+    @apply inline-flex items-center gap-2 rounded-full border border-gold-400/40 bg-navy-800/80 px-3.5 py-1 text-xs font-semibold uppercase tracking-wider text-gold-300;
+  }
+}
+
+/* Pola geometri halus pada latar belakang gelap tanpa mengganggu keterbacaan */
+.bg-subtle-arabesque {
+  background-image: radial-gradient(rgba(215, 181, 109, 0.12) 1px, transparent 1px),
+    radial-gradient(rgba(69, 198, 198, 0.08) 1px, transparent 1px);
+  background-size: 36px 36px;
+  background-position: 0 0, 18px 18px;
+}
